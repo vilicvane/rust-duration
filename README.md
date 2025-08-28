@@ -11,9 +11,15 @@ cargo add duration
 ## Usage
 
 ```rust
+use std::time::Duration;
+
 use duration::duration;
 
-let interval = duration!("7d");
+const INTERVAL: Duration = duration!("7d");
+
+fn main() {
+  let interval = duration!("7d");
+}
 ```
 
 ## License
