@@ -1,4 +1,4 @@
-error: failed to parse duration literal: expected number at 0
+error: failed to parse duration string: expected number at 0
  --> tests/trybuild/fail.rs:5:39
   |
 5 | const _DURATION: Duration = duration!("not-a-duration");

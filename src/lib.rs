@@ -1,24 +1,27 @@
 use proc_macro::TokenStream;
-use syn::{LitStr, parse_macro_input};
 use quote::quote;
+use syn::{LitStr, parse_macro_input};
 
 #[proc_macro]
 pub fn duration(input: TokenStream) -> TokenStream {
-    let lit = parse_macro_input!(input as LitStr);
-    let s = lit.value();
+    let literal = parse_macro_input!(input as LitStr);
+    let string = literal.value();
 
-    match humantime::parse_duration(&s) {
-        Ok(dur) => {
-            let secs = dur.as_secs();
-            let nanos = dur.subsec_nanos();
-            let expanded = quote! {
-                ::std::time::Duration::new(#secs, #nanos)
-            };
-            expanded.into()
+    match humantime::parse_duration(&string) {
+        Ok(duration) => {
+            let seconds = duration.as_secs();
+            let nanoseconds = duration.subsec_nanos();
+
+            quote! {
+                ::std::time::Duration::new(#seconds, #nanoseconds)
+            }
+            .into()
         }
-        Err(e) => {
-            let err = syn::Error::new(lit.span(), format!("failed to parse duration literal: {}", e));
-            err.to_compile_error().into()
-        }
+        Err(error) => syn::Error::new(
+            literal.span(),
+            format!("failed to parse duration string: {error}"),
+        )
+        .to_compile_error()
+        .into(),
     }
 }
