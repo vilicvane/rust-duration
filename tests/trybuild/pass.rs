@@ -5,5 +5,5 @@ use duration::duration;
 const DURATION: Duration = duration!("2h");
 
 fn main() {
-    assert_eq!(DURATION.as_secs(), 7200);
+  assert_eq!(DURATION.as_secs(), 7200);
 }
