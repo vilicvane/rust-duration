@@ -1,6 +1,6 @@
 [package]
 name = "duration"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A simple proc-macro that parses duration strings using humantime."
 keywords = ["duration", "time", "proc-macro", "parse", "humantime"]
