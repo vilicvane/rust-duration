@@ -1,0 +1,5 @@
+error: failed to parse duration literal: expected number at 0
+ --> tests/trybuild/fail.rs:3:43
+  |
+3 | const _D: std::time::Duration = duration!("not-a-duration");
+  |                                           ^^^^^^^^^^^^^^^^
