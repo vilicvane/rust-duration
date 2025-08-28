@@ -1,6 +1,6 @@
 # Rust Duration
 
-A simple proc-macro that parses duration strings using [humantime].
+A tiny proc-macro that parses duration strings at compile time using [humantime].
 
 ## Installation
 

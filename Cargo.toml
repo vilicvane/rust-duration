@@ -2,7 +2,7 @@
 name = "duration"
 version = "0.1.1"
 edition = "2024"
-description = "A simple proc-macro that parses duration strings using humantime."
+description = "A tiny proc-macro that parses duration strings at compile time using humantime."
 keywords = ["duration", "time", "proc-macro", "parse", "humantime"]
 license = "MIT"
 repository = "https://github.com/vilicvane/rust-duration"
