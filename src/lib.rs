@@ -1,3 +1,5 @@
+#![cfg_attr(docsrs, feature(doc_cfg))]
+
 //! A proc-macro collection that parses human-readable strings at compile time.
 
 use proc_macro::TokenStream;
