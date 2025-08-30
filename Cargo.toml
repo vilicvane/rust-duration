@@ -1,6 +1,6 @@
 [package]
 name = "lits"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2024"
 description = "A proc-macro collection that parses human-readable literals at compile time."
 keywords = ["proc-macro", "duration", "humantime", "bytes", "bytesize"]
