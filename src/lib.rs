@@ -12,7 +12,6 @@ use syn::{LitStr, parse_macro_input};
 /// ```rust
 /// # use std::time::Duration;
 /// # use lits::duration;
-///
 /// const DURATION: Duration = duration!("7d");
 /// let duration: Duration = duration!("7d");
 ///
@@ -43,12 +42,11 @@ pub fn duration(input: TokenStream) -> TokenStream {
   }
 }
 
-/// Parses a human-readable byte size string at compile time into a
-/// integer using [bytesize].
+/// Parses a human-readable byte size string at compile time into an integer
+/// using [bytesize].
 ///
 /// ```rust
 /// # use lits::bytes;
-///
 /// const SIZE: u32 = bytes!("1ki");
 /// let size = bytes!("1k");
 ///
