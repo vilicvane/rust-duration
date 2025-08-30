@@ -15,8 +15,13 @@ proc-macro = true
 proc-macro2 = "1"
 quote = "1"
 syn = { version = "2", features = ["parsing"] }
-humantime = "2"
-bytesize = "2"
+humantime = { version = "2", optional = true }
+bytesize = { version = "2", optional = true }
 
 [dev-dependencies]
 trybuild = "1"
+
+[features]
+default = ["duration", "bytes"]
+duration = ["humantime"]
+bytes = ["bytesize"]

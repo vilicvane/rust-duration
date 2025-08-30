@@ -18,6 +18,8 @@ use syn::{LitStr, parse_macro_input};
 /// assert_eq!(DURATION, Duration::new(7 * 24 * 60 * 60, 0));
 /// assert_eq!(duration, Duration::new(7 * 24 * 60 * 60, 0));
 /// ```
+#[cfg_attr(docsrs, doc(cfg(feature = "duration")))]
+#[cfg(feature = "duration")]
 #[proc_macro]
 pub fn duration(input: TokenStream) -> TokenStream {
   let literal = parse_macro_input!(input as LitStr);
@@ -53,6 +55,8 @@ pub fn duration(input: TokenStream) -> TokenStream {
 /// assert_eq!(SIZE, 1024);
 /// assert_eq!(size, 1000);
 /// ```
+#[cfg_attr(docsrs, doc(cfg(feature = "bytes")))]
+#[cfg(feature = "bytes")]
 #[proc_macro]
 pub fn bytes(input: TokenStream) -> TokenStream {
   let literal = parse_macro_input!(input as LitStr);

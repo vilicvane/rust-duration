@@ -17,11 +17,29 @@ jobs:
           - stable
           - beta
           - nightly
+        features:
+          - default
+          - duration
+          - bytes
     steps:
       - uses: actions/checkout@v4
       - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
-      - run: cargo build --verbose
-      - run: cargo test --verbose
+      - run: |
+          case "${{ matrix.features }}" in
+            default)
+              cargo build --verbose
+              cargo test --verbose
+              ;;
+            duration)
+              cargo build --no-default-features --features duration --verbose
+              cargo test --no-default-features --features duration --verbose
+              ;;
+            bytes)
+              cargo build --no-default-features --features bytes --verbose
+              cargo test --no-default-features --features bytes --verbose
+              ;;
+          esac
+
       - run: cargo doc --verbose
       - run: cargo clippy --verbose
         if: matrix.toolchain == 'stable'
