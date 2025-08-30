@@ -1,48 +1,24 @@
-//! A tiny proc-macro that parses human-friendly duration strings at compile
-//! time using [humantime].
-//!
-//! The `duration!` macro accepts a string literal and expands to a
-//! `std::time::Duration` value constructed with the parsed seconds and
-//! nanoseconds. Parsing uses the `humantime` crate, so the same formats are
-//! accepted (for example: "1h 30m", "45s", "1500ms").
-//!
-//! # Examples
-//!
-//! ```rust
-//! use std::time::Duration;
-//!
-//! use duration::duration;
-//!
-//! let duration: Duration = duration!("7d");
-//!
-//! assert_eq!(duration, Duration::new(7 * 24 * 60 * 60, 0));
-//! ```
-//!
-//! # Errors
-//!
-//! If the provided string literal cannot be parsed by `humantime`, the macro
-//! emits a compile-time error describing the parse failure. The macro also
-//! requires a string literal as its input; passing arbitrary tokens will fail
-//! to parse and result in a compiler error.
-//!
-//! # Notes
-//!
-//! - This macro is evaluated at compile time and expands to a const
-//!   `std::time::Duration` construction.
-//! - The macro intentionally rejects non-literal input to keep the result a
-//!   compile-time constant.
+//! A proc-macro collection that parses human-readable strings at compile time.
 
 use proc_macro::TokenStream;
+use proc_macro2::Span;
 use quote::quote;
+use syn::LitInt;
 use syn::{LitStr, parse_macro_input};
 
-/// Parse a human-friendly duration string into a `std::time::Duration` at
-/// compile time.
+/// Parses a human-readable duration string at compile time into an
+/// `std::time::Duration` using [humantime].
 ///
-/// The input must be a string literal and is parsed using
-/// `humantime::parse_duration`. On success the macro expands to
-/// `::std::time::Duration::new(seconds, nanos)`. On failure it emits a compile
-/// error with the underlying parse message.
+/// ```rust
+/// # use std::time::Duration;
+/// # use lits::duration;
+///
+/// const DURATION: Duration = duration!("7d");
+/// let duration: Duration = duration!("7d");
+///
+/// assert_eq!(DURATION, Duration::new(7 * 24 * 60 * 60, 0));
+/// assert_eq!(duration, Duration::new(7 * 24 * 60 * 60, 0));
+/// ```
 #[proc_macro]
 pub fn duration(input: TokenStream) -> TokenStream {
   let literal = parse_macro_input!(input as LitStr);
@@ -61,6 +37,41 @@ pub fn duration(input: TokenStream) -> TokenStream {
     Err(error) => syn::Error::new(
       literal.span(),
       format!("failed to parse duration string: {error}"),
+    )
+    .to_compile_error()
+    .into(),
+  }
+}
+
+/// Parses a human-readable byte size string at compile time into a
+/// integer using [bytesize].
+///
+/// ```rust
+/// # use lits::bytes;
+///
+/// const SIZE: u32 = bytes!("1ki");
+/// let size = bytes!("1k");
+///
+/// assert_eq!(SIZE, 1024);
+/// assert_eq!(size, 1000);
+/// ```
+#[proc_macro]
+pub fn bytes(input: TokenStream) -> TokenStream {
+  let literal = parse_macro_input!(input as LitStr);
+  let string = literal.value();
+
+  match string.parse::<bytesize::ByteSize>() {
+    Ok(size) => {
+      let bytes = LitInt::new(&size.as_u64().to_string(), Span::call_site());
+
+      quote! {
+        #bytes
+      }
+      .into()
+    }
+    Err(error) => syn::Error::new(
+      literal.span(),
+      format!("failed to parse size string: {error}"),
     )
     .to_compile_error()
     .into(),

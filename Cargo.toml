@@ -1,12 +1,12 @@
 [package]
-name = "duration"
-version = "0.1.2"
+name = "lits"
+version = "0.1.0"
 edition = "2024"
-description = "A tiny proc-macro that parses duration strings at compile time using humantime."
-keywords = ["duration", "time", "proc-macro", "parse", "humantime"]
+description = "A proc-macro collection that parses human-readable literals at compile time."
+keywords = ["proc-macro", "duration", "humantime", "bytes", "bytesize"]
 license = "MIT"
-repository = "https://github.com/vilicvane/rust-duration"
-documentation = "https://docs.rs/duration"
+repository = "https://github.com/vilicvane/rust-lits"
+documentation = "https://docs.rs/lits"
 
 [lib]
 proc-macro = true
@@ -16,6 +16,7 @@ proc-macro2 = "1"
 quote = "1"
 syn = { version = "2", features = ["parsing"] }
 humantime = "2"
+bytesize = "2"
 
 [dev-dependencies]
 trybuild = "1"

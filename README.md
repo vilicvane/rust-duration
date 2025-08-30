@@ -1,29 +1,31 @@
-# Rust Duration
+# Rust Lits
 
-A tiny proc-macro that parses duration strings at compile time using [humantime].
+A proc-macro collection that parses human-readable strings at compile time.
 
 ## Installation
 
 ```sh
-cargo add duration
+cargo add lits
 ```
 
 ## Usage
 
 ```rust
-use std::time::Duration;
+use lits::*;
 
-use duration::duration;
+let interval = duration!("7d");
 
-const INTERVAL: Duration = duration!("7d");
-
-fn main() {
-  let interval = duration!("7d");
-}
+let size = bytes!("1mi");
 ```
+
+## Parsers
+
+- [humantime] for `duration!`.
+- [bytesize] for `bytes!`.
 
 ## License
 
 MIT License.
 
 [humantime]: https://crates.io/crates/humantime
+[bytesize]: https://crates.io/crates/bytesize

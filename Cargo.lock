@@ -3,15 +3,10 @@
 version = 4
 
 [[package]]
-name = "duration"
-version = "0.1.2"
-dependencies = [
- "humantime",
- "proc-macro2",
- "quote",
- "syn",
- "trybuild",
-]
+name = "bytesize"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a3c8f83209414aacf0eeae3cf730b18d6981697fba62f200fcfb92b9f082acba"
 
 [[package]]
 name = "equivalent"
@@ -52,6 +47,18 @@ name = "itoa"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
+
+[[package]]
+name = "lits"
+version = "0.1.0"
+dependencies = [
+ "bytesize",
+ "humantime",
+ "proc-macro2",
+ "quote",
+ "syn",
+ "trybuild",
+]
 
 [[package]]
 name = "memchr"

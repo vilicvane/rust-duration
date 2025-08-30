@@ -1,0 +1,5 @@
+error: failed to parse size string: couldn't parse "not-a-size" into a ByteSize, cannot parse float from empty string
+ --> tests/trybuild/bytes_fail.rs:3:27
+  |
+3 | const _SIZE: u64 = bytes!("not-a-size");
+  |                           ^^^^^^^^^^^^

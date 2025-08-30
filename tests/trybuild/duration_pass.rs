@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use duration::duration;
+use lits::duration;
 
 const DURATION: Duration = duration!("2h");
 

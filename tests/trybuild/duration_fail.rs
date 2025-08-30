@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use duration::duration;
+use lits::duration;
 
 const _DURATION: Duration = duration!("not-a-duration");
 
