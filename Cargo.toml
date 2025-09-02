@@ -23,3 +23,5 @@ trybuild = "1"
 
 [features]
 default = ["humantime", "bytesize"]
+humantime = ["dep:humantime"]
+bytesize = ["dep:bytesize"]
