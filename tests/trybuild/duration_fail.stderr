@@ -1,5 +1,5 @@
-error: failed to parse duration string: expected number at 0
- --> tests/trybuild/duration_fail.rs:5:39
+error: failed to parse string as Duration: expected number at 0
+ --> tests/trybuild/duration_fail.rs:2:19
   |
-5 | const _DURATION: Duration = duration!("not-a-duration");
-  |                                       ^^^^^^^^^^^^^^^^
+2 |   lits::duration!("not-a-duration");
+  |                   ^^^^^^^^^^^^^^^^

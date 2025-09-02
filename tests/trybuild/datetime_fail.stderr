@@ -1,0 +1,5 @@
+error: failed to parse string as SystemTime: timestamp format is invalid
+ --> tests/trybuild/datetime_fail.rs:2:19
+  |
+2 |   lits::datetime!("not-a-datetime");
+  |                   ^^^^^^^^^^^^^^^^

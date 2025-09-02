@@ -1,5 +1,3 @@
-use lits::bytes;
-
-const _SIZE: u64 = bytes!("not-a-size");
-
-fn main() {}
+fn main() {
+  lits::bytes!("not-a-size");
+}

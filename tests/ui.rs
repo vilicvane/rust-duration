@@ -6,6 +6,9 @@ fn ui_tests() {
   {
     t.pass("tests/trybuild/duration_pass.rs");
     t.compile_fail("tests/trybuild/duration_fail.rs");
+
+    t.pass("tests/trybuild/datetime_pass.rs");
+    t.compile_fail("tests/trybuild/datetime_fail.rs");
   }
 
   #[cfg(feature = "bytesize")]

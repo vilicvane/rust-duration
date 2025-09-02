@@ -33,7 +33,50 @@ pub fn duration(input: TokenStream) -> TokenStream {
     }
     Err(error) => syn::Error::new(
       literal.span(),
-      format!("failed to parse duration string: {error}"),
+      format!("failed to parse string as Duration: {error}"),
+    )
+    .to_compile_error()
+    .into(),
+  }
+}
+
+/// Parses a human-readable date-time string at compile time into an
+/// `std::time::SystemTime` using [humantime].
+///
+/// ```rust
+/// # use std::time::{Duration, SystemTime, UNIX_EPOCH};
+/// # use lits::datetime;
+/// assert_eq!(
+///   datetime!("2000-01-01T00:00:00Z"),
+///   UNIX_EPOCH + Duration::from_secs(946684800)
+/// );
+/// ```
+#[cfg_attr(docsrs, doc(cfg(feature = "humantime")))]
+#[cfg(feature = "humantime")]
+#[proc_macro]
+pub fn datetime(input: TokenStream) -> TokenStream {
+  let literal = parse_macro_input!(input as LitStr);
+  let string = literal.value();
+
+  match humantime::parse_rfc3339_weak(&string) {
+    Ok(datetime) => {
+      use std::time::UNIX_EPOCH;
+
+      // Humantime doesn't support time earlier than epoch anyway, so we can
+      // safely unwrap here if it was an Ok.
+      let duration = datetime.duration_since(UNIX_EPOCH).unwrap();
+
+      let seconds = duration.as_secs();
+      let nanoseconds = duration.subsec_nanos();
+
+      quote! {
+        ::std::time::SystemTime::UNIX_EPOCH + ::std::time::Duration::new(#seconds, #nanoseconds)
+      }
+      .into()
+    }
+    Err(error) => syn::Error::new(
+      literal.span(),
+      format!("failed to parse string as SystemTime: {error}"),
     )
     .to_compile_error()
     .into(),
@@ -66,7 +109,7 @@ pub fn bytes(input: TokenStream) -> TokenStream {
     }
     Err(error) => syn::Error::new(
       literal.span(),
-      format!("failed to parse size string: {error}"),
+      format!("failed to parse string as byte size: {error}"),
     )
     .to_compile_error()
     .into(),
