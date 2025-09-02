@@ -22,6 +22,4 @@ bytesize = { version = "2", optional = true }
 trybuild = "1"
 
 [features]
-default = ["duration", "bytes"]
-duration = ["humantime"]
-bytes = ["bytesize"]
+default = ["humantime", "bytesize"]

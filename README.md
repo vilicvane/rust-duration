@@ -13,9 +13,10 @@ cargo add lits
 ```rust
 use lits::*;
 
-let interval = duration!("7 days");
+assert_eq!(duration!("7 days"), Duration::from_secs(7 * 24 * 60 * 60));
 
-let size = bytes!("1 MiB");
+assert_eq!(bytes!("1 kiB"), 1024);
+assert_eq!(bytes!("1 kB"), 1000);
 ```
 
 ## Parsers

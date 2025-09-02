@@ -3,9 +3,7 @@
 //! A proc-macro collection that parses human-readable strings at compile time.
 
 use proc_macro::TokenStream;
-use proc_macro2::Span;
 use quote::quote;
-use syn::LitInt;
 use syn::{LitStr, parse_macro_input};
 
 /// Parses a human-readable duration string at compile time into an
@@ -14,14 +12,10 @@ use syn::{LitStr, parse_macro_input};
 /// ```rust
 /// # use std::time::Duration;
 /// # use lits::duration;
-/// const DURATION: Duration = duration!("7d");
-/// let duration: Duration = duration!("7d");
-///
-/// assert_eq!(DURATION, Duration::new(7 * 24 * 60 * 60, 0));
-/// assert_eq!(duration, Duration::new(7 * 24 * 60 * 60, 0));
+/// assert_eq!(duration!("7d"), Duration::from_secs(7 * 24 * 60 * 60));
 /// ```
-#[cfg_attr(docsrs, doc(cfg(feature = "duration")))]
-#[cfg(feature = "duration")]
+#[cfg_attr(docsrs, doc(cfg(feature = "humantime")))]
+#[cfg(feature = "humantime")]
 #[proc_macro]
 pub fn duration(input: TokenStream) -> TokenStream {
   let literal = parse_macro_input!(input as LitStr);
@@ -51,14 +45,11 @@ pub fn duration(input: TokenStream) -> TokenStream {
 ///
 /// ```rust
 /// # use lits::bytes;
-/// const SIZE: u32 = bytes!("1ki");
-/// let size = bytes!("1k");
-///
-/// assert_eq!(SIZE, 1024);
-/// assert_eq!(size, 1000);
+/// assert_eq!(bytes!("1 kiB"), 1024u64);
+/// assert_eq!(bytes!("1 kB"), 1000u64);
 /// ```
-#[cfg_attr(docsrs, doc(cfg(feature = "bytes")))]
-#[cfg(feature = "bytes")]
+#[cfg_attr(docsrs, doc(cfg(feature = "bytesize")))]
+#[cfg(feature = "bytesize")]
 #[proc_macro]
 pub fn bytes(input: TokenStream) -> TokenStream {
   let literal = parse_macro_input!(input as LitStr);
@@ -66,7 +57,7 @@ pub fn bytes(input: TokenStream) -> TokenStream {
 
   match string.parse::<bytesize::ByteSize>() {
     Ok(size) => {
-      let bytes = LitInt::new(&size.as_u64().to_string(), Span::call_site());
+      let bytes = size.as_u64();
 
       quote! {
         #bytes
