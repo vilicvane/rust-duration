@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["bytesize", "docsrs", "humantime", "nanos", "subsec"]
+  "cSpell.words": [
+    "bytesize",
+    "docsrs",
+    "humantime",
+    "millis",
+    "nanos",
+    "subsec"
+  ]
 }
