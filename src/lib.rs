@@ -2,6 +2,9 @@
 
 //! A proc-macro collection that parses human-readable strings at compile time.
 
+#[cfg(feature = "humantime")]
+mod duration;
+
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{LitStr, parse_macro_input};
@@ -13,16 +16,21 @@ use syn::{LitStr, parse_macro_input};
 /// # use std::time::Duration;
 /// # use lits::duration;
 /// assert_eq!(duration!("7d"), Duration::from_secs(7 * 24 * 60 * 60));
+/// assert_eq!(duration!("1d" * 7), Duration::from_secs(7 * 24 * 60 * 60));
+/// assert_eq!(duration!("2s" / 20), Duration::from_millis(100));
 /// ```
 #[cfg_attr(docsrs, doc(cfg(feature = "humantime")))]
 #[cfg(feature = "humantime")]
 #[proc_macro]
 pub fn duration(input: TokenStream) -> TokenStream {
-  let literal = parse_macro_input!(input as LitStr);
-  let string = literal.value();
+  use crate::duration::DurationMacroInput;
 
-  match humantime::parse_duration(&string) {
+  let DurationMacroInput { duration, scalar } = parse_macro_input!(input as DurationMacroInput);
+
+  match humantime::parse_duration(&duration.value()) {
     Ok(duration) => {
+      let duration = duration.mul_f64(scalar);
+
       let seconds = duration.as_secs();
       let nanoseconds = duration.subsec_nanos();
 
@@ -32,7 +40,7 @@ pub fn duration(input: TokenStream) -> TokenStream {
       .into()
     }
     Err(error) => syn::Error::new(
-      literal.span(),
+      duration.span(),
       format!("failed to parse string as Duration: {error}"),
     )
     .to_compile_error()
