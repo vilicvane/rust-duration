@@ -2,12 +2,12 @@
 
 //! A proc-macro collection that parses human-readable strings at compile time.
 
-#[cfg(feature = "humantime")]
-mod duration;
-
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{LitStr, parse_macro_input};
+
+#[cfg(feature = "humantime")]
+mod duration;
 
 /// Parses a human-readable duration string at compile time into an
 /// `std::time::Duration` using [humantime].
@@ -25,7 +25,7 @@ use syn::{LitStr, parse_macro_input};
 pub fn duration(input: TokenStream) -> TokenStream {
   use crate::duration::DurationMacroInput;
 
-  let DurationMacroInput { duration, scalar } = parse_macro_input!(input as DurationMacroInput);
+  let DurationMacroInput { duration, scalar } = parse_macro_input!(input);
 
   match humantime::parse_duration(&duration.value()) {
     Ok(duration) => {
@@ -63,7 +63,7 @@ pub fn duration(input: TokenStream) -> TokenStream {
 #[cfg(feature = "humantime")]
 #[proc_macro]
 pub fn datetime(input: TokenStream) -> TokenStream {
-  let literal = parse_macro_input!(input as LitStr);
+  let literal: LitStr = parse_macro_input!(input);
   let string = literal.value();
 
   match humantime::parse_rfc3339_weak(&string) {
@@ -103,7 +103,7 @@ pub fn datetime(input: TokenStream) -> TokenStream {
 #[cfg(feature = "bytesize")]
 #[proc_macro]
 pub fn bytes(input: TokenStream) -> TokenStream {
-  let literal = parse_macro_input!(input as LitStr);
+  let literal: LitStr = parse_macro_input!(input);
   let string = literal.value();
 
   match string.parse::<bytesize::ByteSize>() {
